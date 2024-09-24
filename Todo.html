@@ -1,0 +1,217 @@
+html>
+  <head>
+    <title> </title>
+  </head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #d9534f;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      font-size: 12em;
+    }
+
+    .content {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      max-width: 2500px;
+      margin: 0 auto;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+      padding: 10px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .task-input {
+      flex: 1;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin-right: 10px;
+      padding: 12px;
+      font-size: 5em;
+    }
+
+    button {
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      text-align: center;
+      padding: 12px 15px;
+      font-size: 1em;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 78px;
+      margin: 0 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button.deletee {
+      background-color: #d9534f;
+    }
+
+    button.editt {
+      background-color: #0275d8;
+    }
+
+    button.deletee:hover {
+      background-color: #c9302c;
+    }
+
+    button.editt:hover {
+      background-color: #025aa5;
+    }
+
+    #add-button {
+      margin-top: 20px;
+      background-color: #5bc0de;
+      font-size: 8em;
+    }
+
+    #add-button:hover {
+      background-color: #31b0d5;
+    }
+  </style>
+  <body>
+    <form onsubmit="return false;">
+      <div class="content">
+        <div class="todo-item">
+          <label for="task"></label>
+          <input
+            type="text"
+            placeholder="Enter the task you want to add"
+            class="task-input"
+          />
+          <input type="checkbox" class="task" name="task" value="task" />
+
+          <button type="button" class="deletee">Delete button</button>
+          <button type="button" class="editt">Edit button</button>
+        </div>
+      </div>
+    </form>
+    <button id="add-button">Add Button</button>
+
+    <script>
+      const taskInput = document.querySelector(".task-input");
+      const contentDiv = document.querySelector(".content");
+
+      const loadTasks = () => {
+        const tasks = JSON.parse(localStorage.getItem("todoTasks")) || [];
+        tasks.forEach((task) => {
+          createTaskElement(task);
+        });
+      };
+      const createTaskElement = (task) => {
+        const todoItem = document.createElement("div");
+        todoItem.classList.add("todo-item");
+        todoItem.innerHTML = `
+          <input type="text" class="task-input" value="${task}" />
+          <input type="checkbox" />
+          <button class="deletee">Delete button</button>
+          <button class="editt">Edit button</button>
+      `;
+        contentDiv.appendChild(todoItem);
+      };
+
+      const saveTasksToLocalStorage = () => {
+        const tasks = Array.from(
+          contentDiv.querySelectorAll(".task-input")
+        ).map((input) => input.value);
+        localStorage.setItem("todoTasks", JSON.stringify(tasks));
+      };
+      document.getElementById("add-button").addEventListener("click", () => {
+        const inputData = taskInput.value.trim();
+        if (inputData) {
+          createTaskElement(inputData);
+          taskInput.value = "";
+          saveTasksToLocalStorage();
+        }
+      });
+
+      /* function addd() {
+        let input_data;
+
+        input_data = abvjdvb.value;
+
+       
+          const abgh = document.createElement("div");
+          abgh.classList.add("todo-item");
+
+          const template = ` 
+            <div class="content">
+            <div class="todo-item">
+              <label for="task"></label>
+              <input
+                type="text"
+                placeholder="Enter the task you want to add"
+         
+                class="task-input"
+            
+              />
+              <input type="checkbox" id="task" name="task" value="task" />
+      
+              <button class="deletee">Delete button</button>
+              <button class="editt">Edit button</button>
+            </div>
+          </div>
+          
+          
+           `;
+          abgh.innerHTML = template;
+          document.querySelector(".content").appendChild(abgh);
+
+      
+      
+        localStorage.setItem("stored_value", input_data);
+      } */
+
+      function edit(event) {
+        const edit_button =
+          event.target.parentElement.querySelector(".task-input");
+        const abcgf = prompt("enter the new value", edit_button.value);
+        if (abcgf !== null) {
+          edit_button.value = abcgf;
+        }
+        saveTasksToLocalStorage();
+      }
+      function deletee(event) {
+        event.target.parentElement.remove();
+        saveTasksToLocalStorage();
+      }
+
+      /* document.querySelector('.todo-item').addEventListener('click',(t)=>
+      {
+        if(event.target.classList.contains('add-buutton'))
+        {
+          addd()
+        }
+      }) */
+
+      // abvjdvb.addEventListener("click", addd());
+
+      document.querySelector(".content").addEventListener("click", (event) => {
+        if (event.target.classList.contains("deletee")) {
+          deletee(event);
+        } else if (event.target.classList.contains("editt")) {
+          edit(event);
+        }
+      });
+      loadTasks();
+    </script>
+  </body>
+</html>
